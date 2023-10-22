@@ -9,68 +9,78 @@ import SwiftUI
 
 struct ContentView: View {
     
-    var emojis = ["✈️", "🚘", "🚂", "🚁", "🚈", "🛩️", "🚀", "🛶", "🚢", "🚆", "🚖", "🛵", "🚜", "🛴", "🚛"]
+    let emojis = ["✈️", "🚘", "🚂", "🚁", "🚈", "🛩️", "🚀", "🛶", "🚢", "🚆", "🚖", "🛵", "🚜", "🛴", "🚛"]
     
-    @State var emojiCount = 3
+    @State var emojiCount = 7
 
     var body: some View {
-        
         VStack {
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
-                        CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
-                    }
-                }
+                cards
             }
-            .foregroundColor(/*@START_MENU_TOKEN@*/.red/*@END_MENU_TOKEN@*/)
             
             Spacer()
             
-            HStack {
-                Button{
-                    if emojiCount > 1 {
-                        emojiCount -= 1
-                    }
-                }
-                       label: {Image(systemName: "minus.circle")}
-                
-                Spacer()
-                
-                Button {
-                    if emojiCount < emojis.count {
-                        emojiCount += 1
-                    }
-                }
-                       label: {Image(systemName: "plus.circle")}
-            }
-            .font(.largeTitle)
-            .padding(.horizontal)
-            
+            cardCountAdjusters
         }
         .padding(.horizontal)
-        
-        
+    }
+    
+    var cards: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))]) {
+            ForEach(0..<emojiCount, id: \.self) { emoji in
+                CardView(content: emojis[emoji]).aspectRatio(2/3, contentMode: .fit)
+            }
+        }
+        .foregroundColor(.orange)
+    }
+    
+    var cardCountAdjusters: some View {
+        HStack {
+            cardRemover
+            Spacer()
+            cardAdder
+        }
+        .imageScale(.large)
+        .font(.largeTitle)
+        .padding(.horizontal)
+    }
+    
+    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
+        Button(action: {
+            emojiCount += offset
+        }, label: {
+            Image(systemName: symbol)
+        }).disabled(emojiCount + offset < 1 || emojiCount + offset > emojis.count)
+    }
+    
+    var cardRemover: some View {
+        cardCountAdjuster(by: -1, symbol: "minus.circle")
+    }
+    
+    var cardAdder: some View {
+        cardCountAdjuster(by: +1, symbol: "plus.circle")
     }
 }
 
-//test 333
+
 
 
 
 struct CardView: View {
-    var content: String
+    let content: String
     @State var isFaceUp = true
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 25)
-            if isFaceUp {
-                shape.fill().foregroundColor(.white)
+            Group {
+                shape.fill(.white)
                 shape.strokeBorder(lineWidth: 3)
                 Text(content).font(.largeTitle)
-            } else {
-                shape.fill()
             }
+            .opacity(isFaceUp ? 1 : 0)
+            shape.fill().opacity(isFaceUp ? 0 : 1)
+            
         }
         .onTapGesture{
             isFaceUp.toggle()
