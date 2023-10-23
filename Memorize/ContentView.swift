@@ -9,12 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let emojis = ["✈️", "🚘", "🚂", "🚁", "🚈", "🛩️", "🚀", "🛶", "🚢", "🚆", "🚖", "🛵", "🚜", "🛴", "🚛"]
+    @State private var emojis = ["🚖", "🛵", "🚜", "🛴", "🚛", "🚖", "🛵", "🚜", "🛴", "🚛"]
     
     @State var emojiCount = 7
-
+    
     var body: some View {
         VStack {
+            
+            
+            Text("Memorize").font(.system(size: 40, weight: .bold, design: .default))
+                .padding()
+            
+            cardThemeAdjusters
+            
             ScrollView {
                 cards
             }
@@ -35,6 +42,7 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
     
+    // code to adjust count of cards
     var cardCountAdjusters: some View {
         HStack {
             cardRemover
@@ -61,7 +69,63 @@ struct ContentView: View {
     var cardAdder: some View {
         cardCountAdjuster(by: +1, symbol: "plus.circle")
     }
+    
+    
+    // code to adjust theme of cards
+    
+    var cardThemeAdjusters: some View {
+        HStack {
+            
+                        theme1
+            Spacer()
+
+            
+                        theme2
+            Spacer()
+
+                        theme3
+        }
+        .imageScale(.large)
+        .font(.largeTitle)
+        .padding(.horizontal)
+    }
+    
+    
+    
+    
+    func cardThemeAdjuster(theme: [String], symbol: String) -> some View {
+        Button(action: {
+            emojis = theme
+        }, label: {
+            Image(systemName: symbol)
+        })
+    }
+    
+    var theme1: some View {
+        VStack{
+            cardThemeAdjuster(theme: ["✈️", "🚘", "🚂", "🚁", "✈️", "🚘", "🚂", "🚁"], symbol: "car.fill")
+            Text("Vehicles").font(.system(size: 15))
+        }
+    }
+    
+    var theme2: some View {
+        cardThemeAdjuster(theme: [ "🚈", "🛩️", "🚀", "🛶", "🚈", "🛩️", "🚀", "🛶"], symbol: "soccerball")
+//        need to replace emojis with games
+    }
+    
+    var theme3: some View {
+        cardThemeAdjuster(theme: ["🚢", "🚆", "🚖", "🛵", "🚢", "🚆", "🚖", "🛵"], symbol: "minus.circle")
+    }
+    
 }
+
+
+
+
+
+
+
+
 
 
 
