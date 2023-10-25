@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var emojis = ["🚖", "🛵", "🚜", "🛴", "🚛", "🚖", "🛵", "🚜", "🛴", "🚛"]
+    @State private var emojis = ["✈️", "🚘", "🚂", "🚁", "✈️", "🚘", "🚂", "🚁"].shuffled()
     
     @State var emojiCount = 7
     
@@ -103,18 +103,24 @@ struct ContentView: View {
     
     var theme1: some View {
         VStack{
-            cardThemeAdjuster(theme: ["✈️", "🚘", "🚂", "🚁", "✈️", "🚘", "🚂", "🚁"], symbol: "car.fill")
+            cardThemeAdjuster(theme: ["✈️", "🚘", "🚂", "🚁", "✈️", "🚘", "🚂", "🚁"].shuffled(), symbol: "car.fill")
             Text("Vehicles").font(.system(size: 15))
         }
     }
     
     var theme2: some View {
-        cardThemeAdjuster(theme: [ "🚈", "🛩️", "🚀", "🛶", "🚈", "🛩️", "🚀", "🛶"], symbol: "soccerball")
+        VStack{
+            cardThemeAdjuster(theme: ["⚽️", "🏀", "🏈", "🏏", "🎳", "⚽️", "🏀", "🏈", "🏏", "🎳"].shuffled(), symbol: "soccerball")
+            Text("Sports").font(.system(size: 15))
+        }
 //        need to replace emojis with games
     }
     
     var theme3: some View {
-        cardThemeAdjuster(theme: ["🚢", "🚆", "🚖", "🛵", "🚢", "🚆", "🚖", "🛵"], symbol: "minus.circle")
+        VStack{
+            cardThemeAdjuster(theme: ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "0️⃣", "1️⃣", "2️⃣", "3️⃣"].shuffled(), symbol: "numbersign")
+            Text("Numbers").font(.system(size: 15))
+        }
     }
     
 }
@@ -133,7 +139,7 @@ struct ContentView: View {
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp = true
+    @State var isFaceUp = false
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 25)
